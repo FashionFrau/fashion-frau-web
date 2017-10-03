@@ -7,7 +7,7 @@
   "scripts": {
     "clean": " rm -rf node_modules/ dist/;npm install",
     "start": "node ./node_modules/webpack-dev-server/bin/webpack-dev-server.js",
-    "build": "npm run clean;NODE_ENV=production node node_modules/.bin/webpack; cp index.html dist/index.html"
+    "build": "npm run clean;NODE_ENV=production node node_modules/.bin/webpack -p; cp index.html dist/index.html"
   },
   "author": "Nilson Magalhães Júnior",
   "devDependencies": {
@@ -22,12 +22,17 @@
     "uglify-js": "git://github.com/mishoo/UglifyJS2#harmony-v2.8.22"
   },
   "dependencies": {
-    "babel-preset-stage-1": "^6.24.1",
+    "axios": "^0.16.2",
+    "babel-polyfill": "^6.26.0",
+    "babel-preset-stage-2": "^6.24.1",
     "lodash": "^4.17.4",
     "react": "^16.0.0",
     "react-dom": "^16.0.0",
     "react-redux": "5.0.6",
     "react-router": "^4.2.0",
-    "redux": "^3.7.2"
+    "react-router-dom": "^4.2.2",
+    "react-virtualized": "^9.10.1",
+    "redux": "^3.7.2",
+    "redux-saga": "^0.15.6"
   }
 }
