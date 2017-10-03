@@ -6,5 +6,9 @@ const instance = axios.create({
 })
 
 export function fetchLooks() {
-  return  instance.get('users/1/looks');
+  return instance.get('users/1/looks')
+}
+
+export function fetchLook(id) {
+  return instance.get(`users/1/looks/${id}`)
 }

@@ -10,9 +10,17 @@ function createRequestTypes(base) {
 }
 
 export const LOOKS = createRequestTypes('LOOKS')
+export const LOOK = createRequestTypes('LOOK')
 
 export function fetchLooks() {
   return {
     type: LOOKS.REQUEST
+  };
+}
+
+export function fetchLook(id) {
+  return {
+    type: LOOK.REQUEST,
+    id: id
   };
 }
