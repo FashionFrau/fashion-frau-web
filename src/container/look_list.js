@@ -1,15 +1,13 @@
-import _ from 'lodash';
-import React from 'react';
+import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
+import { connect } from 'react-redux';
+import { fetchLooks } from '../actions';
 import {
   CellMeasurer,
   CellMeasurerCache,
   createMasonryCellPositioner,
   Masonry
 } from 'react-virtualized';
-
-// Array of images with captions
-var list = [];
 
 // Default sizes help Masonry decide how many images to batch-measure
 const cache = new CellMeasurerCache({
@@ -26,58 +24,97 @@ const cellPositioner = createMasonryCellPositioner({
   spacer: 10
 })
 
-function cellRenderer ({ index, key, parent, style }) {
-  const datum = list[index]
+class LookList extends Component {
 
-  return (
-    <CellMeasurer
-        cache={cache}
-        index={index}
-        key={key}
-        parent={parent}
-    >
-        <div style={style}>
-            <img
-                src={datum.source}
-                style={{
-                    height: 250,
-                    width: 250
-                }}
-            />
-        </div>
-    </CellMeasurer>
-  )
-}
+  constructor(props) {
+    super(props);
 
+    this.state = { errorMessage: '', list: [] };
 
-function renderLooks() {
-  return(
-        <Masonry
-          cellCount={list.length}
-          cellMeasurerCache={cache}
-          cellPositioner={cellPositioner}
-          cellRenderer={cellRenderer}
-          height={800}
-          width={800}
-        />
-  )
-}
+    this.props.dispatch(fetchLooks());
 
-const LookList = (props) => {
-
-  list = props.looks
-
-  if (!list) {
-      return <div>Loading...</div>;
+    this.renderLooks = this.renderLooks.bind(this);
+    this.cellRenderer = this.cellRenderer.bind(this);
   }
 
-  return (
-    <div>
-        <h2>Looks</h2>
-        {renderLooks()}
-    </div>
-  );
+  componentWillReceiveProps(nextProps) {
+    const { looks } = nextProps;
+    const { errorMessage, data} = looks
 
+    this.setState({
+      errorMessage: errorMessage,
+      list: data
+    })
+  }
+
+  /******************************************************************************/
+  /********************************* Layout *************************************/
+  /******************************************************************************/
+
+  renderErrorMessage() {
+    return (
+      <p style={{ backgroundColor: '#e99', padding: 10, color: 'white' }}>
+        <b>{this.state.errorMessage}</b>
+      </p>
+    )
+  }
+
+  cellRenderer ({ index, key, parent, style }) {
+    const datum = this.state.list[index]
+
+    return (
+      <CellMeasurer
+          cache={cache}
+          index={index}
+          key={key}
+          parent={parent}
+      >
+          <div style={style}>
+              <img
+                  src={datum.source}
+                  style={{
+                      height: 250,
+                      width: 250
+                  }}
+              />
+          </div>
+      </CellMeasurer>
+    )
+  }
+
+  renderLooks() {
+    return(
+          <Masonry
+            cellCount={this.state.list.length}
+            cellMeasurerCache={cache}
+            cellPositioner={cellPositioner}
+            cellRenderer={this.cellRenderer}
+            height={800}
+            width={800}
+          />
+    )
+  }
+
+  render() {
+    if(this.state.errorMessage) {
+      return(
+        <div>
+            {this.renderErrorMessage()}
+        </div>
+      );
+    }
+
+    return (
+      <div>
+          <h2>Looks</h2>
+          {this.renderLooks()}
+      </div>
+    );
+  }
 }
 
-export default LookList;
+function mapStateToProps({ looks }) {
+  return { looks };
+}
+
+export default connect(mapStateToProps)(LookList);

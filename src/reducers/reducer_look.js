@@ -9,7 +9,7 @@ export default function(state = {}, action) {
         data: action.payload.data, ...state
       }
     case ActionTypes.LOOKS.FAILURE:
-      return { error: action.message };
+      return { errorMessage: action.message };
 
     default:
       return state;
