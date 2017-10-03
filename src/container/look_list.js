@@ -34,6 +34,7 @@ class LookList extends Component {
     this.props.dispatch(fetchLooks());
 
     this.renderLooks = this.renderLooks.bind(this);
+    this.renderEmpty = this.renderEmpty.bind(this);
     this.cellRenderer = this.cellRenderer.bind(this);
   }
 
@@ -82,6 +83,14 @@ class LookList extends Component {
     )
   }
 
+  renderEmpty() {
+      return(
+        <div className="jumbotron">
+          <h2 className="text-center">No results</h2>
+        </div>
+      )
+  }
+
   renderLooks() {
     return(
           <Masonry
@@ -102,6 +111,14 @@ class LookList extends Component {
             {this.renderErrorMessage()}
         </div>
       );
+    }
+
+    if(this.state.list.length === 0){
+      return(
+        <div>
+          {this.renderEmpty()}
+        </div>
+      )
     }
 
     return (
