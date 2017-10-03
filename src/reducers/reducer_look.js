@@ -5,10 +5,9 @@ export default function(state = {}, action) {
   switch (action.type) {
 
     case ActionTypes.LOOKS.SUCCESS:
-      return _.mapKeys(action.payload.data, function(value, key) {
-        return key;
-      });
-
+      return {
+        data: action.payload.data, ...state
+      }
     case ActionTypes.LOOKS.FAILURE:
       return { error: action.message };
 

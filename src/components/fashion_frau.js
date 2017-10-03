@@ -19,16 +19,16 @@ class FashionFrau extends Component {
 
   render() {
     const { looks } = this.props;
-    if(looks.error){
+    if(looks.error) {
       return(
         <div>
-          {this.renderErrorMessage(looks.error)}
+            {this.renderErrorMessage(looks.error)}
         </div>
       );
     }
     return(
       <div>
-        <LookList images={looks}/>
+          <LookList looks={looks.data}/>
       </div>
     );
   }
