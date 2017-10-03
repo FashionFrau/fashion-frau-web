@@ -65,7 +65,7 @@ module.exports = {
         // see webpack 1 upgrade guide
 
         options: {
-          presets: ['react', 'es2015', 'stage-1']
+          presets: ['react', 'es2015', 'stage-2']
         },
         // options for the loader
       },
@@ -179,6 +179,7 @@ module.exports = {
   // },
 
   plugins: [],
+  // TODO: CONFIG FOR DEPLOY CSS
   // list of additional plugins
 
 

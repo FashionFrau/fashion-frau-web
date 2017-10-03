@@ -1,14 +1,17 @@
-import _ from 'lodash';
-import { LOOKS_FETCH_REQUESTED, LOOKS_FETCH_SUCCEEDED } from '../actions';
+import _ from 'lodash'
+import * as ActionTypes from '../actions'
 
 export default function(state = {}, action) {
   switch (action.type) {
-    case LOOKS_FETCH_SUCCEEDED:
+
+    case ActionTypes.LOOKS.SUCCESS:
       return _.mapKeys(action.payload.data, function(value, key) {
         return key;
       });
-      case LOOKS_FETCH_REQUESTED:
-        return state;
+
+    case ActionTypes.LOOKS.FAILURE:
+      return { error: action.message };
+
     default:
       return state;
   }

@@ -12,7 +12,6 @@ function renderLook(looks) {
 }
 
 const LookList = (props) => {
-
   return (
     <div>
         <h2>Basic</h2>
@@ -21,7 +20,7 @@ const LookList = (props) => {
         </ul>
     </div>
   );
-}
 
+}
 
 export default LookList;

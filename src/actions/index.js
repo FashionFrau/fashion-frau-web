@@ -1,10 +1,18 @@
-import axios from 'axios';
+const REQUEST = 'REQUEST'
+const SUCCESS = 'SUCCESS'
+const FAILURE = 'FAILURE'
 
-export const LOOKS_FETCH_REQUESTED = 'fetch_looks_request';
-export const LOOKS_FETCH_SUCCEEDED = 'fetch_looks_succeeded';
+function createRequestTypes(base) {
+  return [REQUEST, SUCCESS, FAILURE].reduce((acc, type) => {
+		acc[type] = `${base}_${type}`
+		return acc
+	}, {})
+}
+
+export const LOOKS = createRequestTypes('LOOKS')
 
 export function fetchLooks() {
   return {
-    type: LOOKS_FETCH_REQUESTED
+    type: LOOKS.REQUEST
   };
 }
