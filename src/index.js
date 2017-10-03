@@ -1,15 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
-import { createStore, applyMiddleware } from 'redux';
-
+import createStoreWithMiddleware from './redux/create';
 import FashionFrau from './components/fashion_frau';
-import reducers from './reducers';
 
-const createStoreWithMiddleware = applyMiddleware()(createStore);
+const store = createStoreWithMiddleware();
 
 ReactDOM.render(
-  <Provider store={createStoreWithMiddleware(reducers)}>
+  <Provider store={store}>
     <FashionFrau />
   </Provider>
   , document.querySelector('.container'));

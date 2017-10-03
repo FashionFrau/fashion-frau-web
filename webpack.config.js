@@ -1,8 +1,10 @@
+require("babel-polyfill");
+
 const path = require('path');
-const webpack = require('webpack');
+const PROD = JSON.parse(process.env.PROD_ENV || '0');
 
 module.exports = {
-  entry: "./src/index.js", // string | object | array
+  entry: ["babel-polyfill", "./src/index.js"], // string | object | array
   // Here the application starts executing
   // and webpack starts bundling
 
@@ -12,8 +14,8 @@ module.exports = {
     path: path.resolve(__dirname, "dist"), // string
     // the target directory for all output files
     // must be an absolute path (use the Node.js path module)
-
-    filename: "bundle.min.js", // string
+    filename: PROD ? 'bundle.min.js' : 'bundle.js',
+    // filename: "bundle.min.js", // string
     // the filename template for entry chunks
 
     publicPath: "/", // string
@@ -135,7 +137,7 @@ module.exports = {
   },
 
   performance: {
-    hints: "warning", // enum
+    hints: false, // enum
     maxAssetSize: 200000, // int (in bytes),
     maxEntrypointSize: 400000, // int (in bytes)
     assetFilter: function(assetFilename) {
@@ -167,7 +169,7 @@ module.exports = {
   //   proxy: { // proxy URLs to backend development server
   //     '/api': 'http://localhost:3000'
   //   },
-  //   contentBase: path.join(__dirname, 'public'), // boolean | string | array, static file location
+  //   // contentBase: path.join(__dirname, 'public'), // boolean | string | array, static file location
   //   compress: true, // enable gzip compression
   //   historyApiFallback: true, // true for index.html upon 404, object for multiple paths
   //   hot: true, // hot module replacement. Depends on HotModuleReplacementPlugin
@@ -176,11 +178,7 @@ module.exports = {
   //   // ...
   // },
 
-  plugins: [
-    new webpack.optimize.UglifyJsPlugin({
-      compress: { warnings: "true" }
-    })
-  ],
+  plugins: [],
   // list of additional plugins
 
 

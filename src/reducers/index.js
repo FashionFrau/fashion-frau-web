@@ -1,7 +1,8 @@
 import { combineReducers } from 'redux';
+import LookReducer from './reducer_look';
 
 const rootReducer = combineReducers({
-  state: (state = {}) => state
+  looks: LookReducer
 });
 
 export default rootReducer;
