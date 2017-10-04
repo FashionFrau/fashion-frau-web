@@ -1,4 +1,3 @@
-import _ from 'lodash'
 import * as ActionTypes from '../actions'
 
 export default function(state = {}, action) {

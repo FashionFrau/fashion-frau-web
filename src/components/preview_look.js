@@ -1,4 +1,6 @@
-import React, { Component } from 'react';
+import _ from 'lodash'
+import PropTypes from 'prop-types'
+import React, { Component } from 'react'
 
 export default class PreviewLook extends Component {
 
@@ -6,27 +8,55 @@ export default class PreviewLook extends Component {
   /********************************* Layout *************************************/
   /******************************************************************************/
 
-
   renderGallery() {
     const { look } = this.props
-      return(
-        <div>
-            <img src={look.lookUrl}/>
-        </div>
-      )
+
+    return(
+        <img src={look.lookUrl} className="img-responsive" />
+    )
   }
 
-  renderLook() {
+  renderHeader() {
+    const { look } = this.props
+
     return(
-      <div>
-          {this.renderGallery()}
+          <div className="row look-header">
+              <div className="col-xs-3">
+                  <img src={look.profileUrl} className="img-responsive img-circle"/>
+                  <div className="follow">Follow</div>
+              </div>
+              <div className="col-xs-5"><div className="profile-name">{look.profileName}</div></div>
+              <div className="col-xs-2"><img src="../images/cart.png" /></div>
+              <div className="col-xs-2"><img src="../images/share.png" /></div>
+          </div>
+    )
+  }
+
+  renderDescription(){
+    const { look } = this.props
+
+    return(
+      <div className="row">
+        <div className="look-description">
+          {look.description}
+        </div>
       </div>
     )
   }
 
-  renderIphone5s() {
+  renderFooter() {
+    return (
+      <div className="row">
+          <img
+            className="look-heart"
+            src="../images/heart.png" />
+      </div>
+    );
+  }
+
+  renderIphone8() {
     return(
-      <div className="marvel-device iphone5s">
+      <div className="marvel-device iphone8 gold">
           <div className="top-bar"></div>
           <div className="sleep"></div>
           <div className="volume"></div>
@@ -34,7 +64,14 @@ export default class PreviewLook extends Component {
           <div className="sensor"></div>
           <div className="speaker"></div>
           <div className="screen">
-              {this.renderLook()}
+              {this.renderGallery()}
+              <div className="container-fluid">
+                  {this.renderHeader()}
+                  <div className="floating">
+                    {this.renderDescription()}
+                    {this.renderFooter()}
+                  </div>
+              </div>
           </div>
           <div className="home"></div>
           <div className="bottom-bar"></div>
@@ -43,10 +80,17 @@ export default class PreviewLook extends Component {
   }
 
   render() {
+    if(_.isEmpty(this.props.look)) {
+      return(<div>No look</div>)
+    }
     return(
       <div>
-          {this.renderIphone5s()}
+          {this.renderIphone8()}
       </div>
     );
   }
 }
+
+PreviewLook.propTypes = {
+  look: PropTypes.object.isRequired
+};
