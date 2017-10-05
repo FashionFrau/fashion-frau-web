@@ -47,9 +47,14 @@ export default class PreviewLook extends Component {
   renderFooter() {
     return (
       <div className="row">
-          <img
-            className="look-heart"
-            src="../images/heart.png" />
+        <div className="col-xs-2"></div>
+        <div className="col-xs-4">
+          <img src="../images/unlike.png" />
+        </div>
+        <div className="col-xs-4">
+          <img src="../images/like.png" />
+        </div>
+        <div className="col-xs-2"></div>
       </div>
     );
   }
@@ -64,14 +69,14 @@ export default class PreviewLook extends Component {
           <div className="sensor"></div>
           <div className="speaker"></div>
           <div className="screen">
-              {this.renderGallery()}
-              <div className="container-fluid">
-                  {this.renderHeader()}
-                  <div className="floating">
+            <div className="scrollable">
+                {this.renderGallery()}
+                <div className="container-fluid">
+                    {this.renderHeader()}
                     {this.renderDescription()}
                     {this.renderFooter()}
-                  </div>
-              </div>
+                </div>
+            </div>
           </div>
           <div className="home"></div>
           <div className="bottom-bar"></div>

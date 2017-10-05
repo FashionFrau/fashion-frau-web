@@ -37,18 +37,8 @@
   font-family: 'Courgette-Regular';
   color: gray;
 }
-.floating {
-  position: relative;
-}
 
-.look-heart {
-  position: absolute;
-  z-index: 1;
-  bottom: 0;
-}
-
-.img-look {
-  width: 375px;
-  height: 340px;
-  display: block;
+.scrollable {
+    max-height: 667px;
+    overflow-y: scroll;
 }
