@@ -1,0 +1,32 @@
+.look-header {
+  margin-top: 15px;
+}
+
+.look-header > div > .profile-name {
+  margin-top: 15px;
+  font-weight: bold;
+  font-size: 1.2em;
+  font-family: 'Courgette-Regular';
+}
+
+.look-header > div > .follow {
+  font-size: 0.9em;
+  font-weight: bold;
+  font-family: "Helvetica Neue";
+  margin-top: 3px;
+  margin-left: 10px;
+  color: rgb( 12, 95, 255);
+}
+
+.look-description {
+  margin-top: 15px;
+  padding-left: 5px;
+  padding-right: 5px;
+  font-family: 'Courgette-Regular';
+  color: gray;
+}
+
+.scrollable {
+    max-height: 667px;
+    overflow-y: scroll;
+}
