@@ -7,3 +7,6 @@ Start Project for Development run: `npm i && npm start`
 Deploy locally: `cp -R dist/ /usr/local/var/www`
 
 Start nginx locally: `brew services start nginx`
+
+
+TODO: XSS CRFS rails
