@@ -99,7 +99,7 @@ class LookList extends Component {
 
     return (
       <div>
-        <div className="font-ff text-center ff-title">Looks</div>
+        <div className="text-center ff-title">Looks</div>
           {this.renderLooks()}
       </div>
     );
