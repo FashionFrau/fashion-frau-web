@@ -20,6 +20,15 @@ function* fetchLook(action) {
    }
 }
 
+function* deleteLook(action) {
+   try {
+      const response = yield call(api.deleteLook, action.id);
+      yield put({type: ActionTypes.LOOK.SUCCESS, payload: response});
+   } catch (e) {
+      yield put({type: ActionTypes.LOOK.FAILURE, message: e.message});
+   }
+}
+
 
 /******************************************************************************/
 /******************************* WATCHERS *************************************/
@@ -33,9 +42,14 @@ function* watchFetchLook() {
   yield takeLatest(ActionTypes.LOOK.REQUEST, fetchLook);
 }
 
+function* watchDeleteLook() {
+  yield takeLatest(ActionTypes.LOOK.DELETE, deleteLook);
+}
+
 export default function* rootSaga() {
   yield[
     watchFetchLooks(),
-    watchFetchLook()
+    watchFetchLook(),
+    watchDeleteLook()
   ]
 };
