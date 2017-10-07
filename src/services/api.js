@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 const instance = axios.create({
-  baseURL: 'http://localhost:3000/',
+  baseURL: '/api',
   timeout: 1000
 })
 
@@ -11,4 +11,8 @@ export function fetchLooks() {
 
 export function fetchLook(id) {
   return instance.get(`users/1/looks/${id}`)
+}
+
+export function deleteLook(id) {
+  return instance.delete(`users/1/looks/${id}`)
 }
