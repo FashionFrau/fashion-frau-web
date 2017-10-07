@@ -1,31 +1,24 @@
 import React, { Component } from 'react';
+import { Navbar, Nav, NavItem } from 'react-bootstrap';
 
 export default (props) => {
     return (
-      <nav className="navbar navbar-inner navbar-fixed-top">
-        <div className="container-fluid">
-
-          <div className="navbar-header">
-            <button type="button" className="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-              <span className="sr-only">Toggle navigation</span>
-              <span className="icon-bar"></span>
-              <span className="icon-bar"></span>
-              <span className="icon-bar"></span>
-            </button>
-            <a className="navbar-brand font-ff" href="/">ff</a>
-          </div>
-
-          <div className="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-            <ul className="nav navbar-nav navbar-left">
-              <li><a href="#">List</a></li>
-            </ul>
-
-            <ul className="nav navbar-nav navbar-right">
-              <li><a href="#">Add</a></li>
-              <li><a href="#">Sing Out</a></li>
-            </ul>
-          </div>
-        </div>
-      </nav>
+      <Navbar inverse fixedTop fluid>
+          <Navbar.Header>
+            <Navbar.Brand>
+              <a href="/">ff</a>
+            </Navbar.Brand>
+            <Navbar.Toggle />
+          </Navbar.Header>
+          <Navbar.Collapse>
+            <Nav>
+              <NavItem eventKey={2} href="/">List</NavItem>
+            </Nav>
+            <Nav pullRight>
+              <NavItem eventKey={3} href="#">Add</NavItem>
+              <NavItem eventKey={4} href="#">Sing Out</NavItem>
+            </Nav>
+          </Navbar.Collapse>
+        </Navbar>
     )
 }
