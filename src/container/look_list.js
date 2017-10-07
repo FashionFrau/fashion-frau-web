@@ -99,8 +99,14 @@ class LookList extends Component {
 
     return (
       <div>
-        <p className="font-ff text-center ff-title">Looks</p>
-        {this.renderLooks()}
+        <div className="font-ff text-center ff-title">Looks</div>
+        <div className="row">
+          <div className="col-xs-1"></div>
+          <div className="col-xs-10">
+            {this.renderLooks()}
+          </div>
+          <div className="col-xs-1"></div>
+        </div>
       </div>
     );
   }

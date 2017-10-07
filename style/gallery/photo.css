@@ -17,7 +17,7 @@ img,
 }
 
 .bg img {
-  width: 100%;
+  width: 320px;
   max-height: 320px;
   margin-bottom: -4px;
 }
@@ -44,4 +44,18 @@ img,
 .bg:hover img {
   -webkit-filter: blur(2px);
   filter: blur(2px);
+}
+
+@media screen and (max-width: 400px) {
+  .bg {
+    float: none;
+    /*max-width: 80%;*/
+    /*margin: 1% auto;*/
+  }
+
+  .bg img {
+    max-width: 200px;
+    max-height: 200px;
+    margin-bottom: -4px;
+  }
 }
