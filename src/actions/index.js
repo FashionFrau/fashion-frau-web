@@ -24,3 +24,10 @@ export function fetchLook(id) {
     id: id
   };
 }
+
+export function deleteLook(id) {
+  return {
+    tyep: '',
+    id: id
+  }
+}

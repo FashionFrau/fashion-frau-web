@@ -1,29 +1,8 @@
-import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
-import { connect } from 'react-redux';
-import { fetchLooks } from '../actions';
-import Measure from 'react-measure'
-import {
-  CellMeasurer,
-  CellMeasurerCache,
-  createMasonryCellPositioner,
-  Masonry
-} from 'react-virtualized';
-
-// Default sizes help Masonry decide how many images to batch-measure
-const cache = new CellMeasurerCache({
-  defaultHeight: 250,
-  defaultWidth: 250,
-  fixedWidth: true
-})
-
-// Our masonry layout will use 3 columns with a 10px gutter between
-const cellPositioner = createMasonryCellPositioner({
-  cellMeasurerCache: cache,
-  columnCount: 3,
-  columnWidth: 250,
-  spacer: 10
-})
+import React, { Component } from 'react'
+import ReactDOM from 'react-dom'
+import { connect } from 'react-redux'
+import { fetchLooks, deleteLook } from '../actions'
+import Gallery from '../components/gallery/Gallery'
 
 class LookList extends Component {
 
@@ -33,19 +12,15 @@ class LookList extends Component {
     this.state = {
       errorMessage: '',
       list: [],
-      dimensions: {
-        width: 800,
-        height: 600
-      }
+      currentImage: 0
     };
 
     this.props.dispatch(fetchLooks());
 
     this.renderLooks = this.renderLooks.bind(this);
     this.renderEmpty = this.renderEmpty.bind(this);
-    this.cellRenderer = this.cellRenderer.bind(this);
 
-    this.onResize = this.onResize.bind(this);
+    this.onDeleteClick = this.onDeleteClick.bind(this);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -58,14 +33,22 @@ class LookList extends Component {
     })
   }
 
-  /******************************************************************************/
-  /********************************* Layout *************************************/
-  /******************************************************************************/
+  /****************************************************************************/
+  /********************************* Layout ***********************************/
+  /****************************************************************************/
 
-  onResize(contentRect) {
-    console.log(this.refs);
-    this.setState({ dimensions: contentRect.bounds })
+
+  /********************************* Look *************************************/
+
+  onDeleteClick(event, obj) {
+    const { photo: { id } } = obj
+
+    this.props.dispatch(deleteLook(id, () => {
+      this.props.history.push("/");
+    }));
   }
+
+/********************************* Error **************************************/
 
   renderErrorMessage() {
     return (
@@ -75,28 +58,7 @@ class LookList extends Component {
     )
   }
 
-  cellRenderer ({ index, key, parent, style }) {
-    const datum = this.state.list[index]
-
-    return (
-      <CellMeasurer
-          cache={cache}
-          index={index}
-          key={key}
-          parent={parent}
-      >
-          <div style={style}>
-              <img
-                  src={datum.source}
-                  style={{
-                      height: 250,
-                      width: 250
-                  }}
-              />
-          </div>
-      </CellMeasurer>
-    )
-  }
+/********************************* No data ************************************/
 
   renderEmpty() {
       return(
@@ -106,26 +68,15 @@ class LookList extends Component {
       )
   }
 
+/********************************* Looks **************************************/
   renderLooks() {
-    const { width, height } = this.state.dimensions
-    console.log(width, height);
+
     return(
-      <Measure
-       bounds
-       onResize={this.onResize} >
-       {({ measureRef }) =>
-        <div ref={measureRef}>
-          <Masonry
-            cellCount={this.state.list.length}
-            cellMeasurerCache={cache}
-            cellPositioner={cellPositioner}
-            cellRenderer={this.cellRenderer}
-            height={height}
-            width={width}
-          />
-        </div>
-        }
-      </Measure>
+      <Gallery
+        photos={this.state.list}
+        margin={5}
+        onClick={this.onDeleteClick}
+      />
     )
   }
 
@@ -148,8 +99,8 @@ class LookList extends Component {
 
     return (
       <div>
-          <h2>Looks</h2>
-          {this.renderLooks()}
+        <p className="font-ff text-center ff-title">Looks</p>
+        {this.renderLooks()}
       </div>
     );
   }
