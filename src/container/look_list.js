@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import ReactDOM from 'react-dom'
 import { connect } from 'react-redux'
 import { fetchLooks, deleteLook } from '../actions'
-import Gallery from '../components/gallery/Gallery'
+import Gallery from 'react-photo-gallery'
 
 class LookList extends Component {
 
@@ -100,13 +100,7 @@ class LookList extends Component {
     return (
       <div>
         <div className="font-ff text-center ff-title">Looks</div>
-        <div className="row">
-          <div className="col-xs-1"></div>
-          <div className="col-xs-10">
-            {this.renderLooks()}
-          </div>
-          <div className="col-xs-1"></div>
-        </div>
+          {this.renderLooks()}
       </div>
     );
   }
