@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import { connect } from 'react-redux';
 import { fetchLooks } from '../actions';
+import Measure from 'react-measure'
 import {
   CellMeasurer,
   CellMeasurerCache,
@@ -29,13 +30,22 @@ class LookList extends Component {
   constructor(props) {
     super(props);
 
-    this.state = { errorMessage: '', list: [] };
+    this.state = {
+      errorMessage: '',
+      list: [],
+      dimensions: {
+        width: 800,
+        height: 600
+      }
+    };
 
     this.props.dispatch(fetchLooks());
 
     this.renderLooks = this.renderLooks.bind(this);
     this.renderEmpty = this.renderEmpty.bind(this);
     this.cellRenderer = this.cellRenderer.bind(this);
+
+    this.onResize = this.onResize.bind(this);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -51,6 +61,11 @@ class LookList extends Component {
   /******************************************************************************/
   /********************************* Layout *************************************/
   /******************************************************************************/
+
+  onResize(contentRect) {
+    console.log(this.refs);
+    this.setState({ dimensions: contentRect.bounds })
+  }
 
   renderErrorMessage() {
     return (
@@ -92,15 +107,25 @@ class LookList extends Component {
   }
 
   renderLooks() {
+    const { width, height } = this.state.dimensions
+    console.log(width, height);
     return(
+      <Measure
+       bounds
+       onResize={this.onResize} >
+       {({ measureRef }) =>
+        <div ref={measureRef}>
           <Masonry
             cellCount={this.state.list.length}
             cellMeasurerCache={cache}
             cellPositioner={cellPositioner}
             cellRenderer={this.cellRenderer}
-            height={800}
-            width={800}
+            height={height}
+            width={width}
           />
+        </div>
+        }
+      </Measure>
     )
   }
 
