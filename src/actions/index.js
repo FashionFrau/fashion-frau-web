@@ -13,9 +13,10 @@ function createRequestTypes(base) {
 export const LOOKS = createRequestTypes('LOOKS')
 export const LOOK = createRequestTypes('LOOK')
 
-export function fetchLooks() {
+export function fetchLooks(urlParams) {
   return {
-    type: LOOKS.REQUEST
+    type: LOOKS.REQUEST,
+    params: urlParams
   };
 }
 
