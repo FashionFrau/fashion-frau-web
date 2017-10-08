@@ -30,6 +30,7 @@
     "react-bootstrap": "^0.31.3",
     "react-dom": "^16.0.0",
     "react-images": "^0.5.8",
+    "react-measure": "^2.0.2",
     "react-photo-gallery": "^6.0.7",
     "react-redux": "5.0.6",
     "react-router": "^4.2.0",

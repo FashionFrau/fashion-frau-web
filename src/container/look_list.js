@@ -3,6 +3,8 @@ import ReactDOM from 'react-dom'
 import { connect } from 'react-redux'
 import { fetchLooks, deleteLook } from '../actions'
 import Gallery from 'react-photo-gallery'
+import Measure from 'react-measure';
+import { debounce } from '../utils';
 
 class LookList extends Component {
 
@@ -12,7 +14,10 @@ class LookList extends Component {
     this.state = {
       errorMessage: '',
       list: [],
-      currentImage: 0
+      count: 0,
+      totalCount: 1,
+      pageNum: 1,
+      loadedAll: false
     };
 
     this.props.dispatch(fetchLooks());
@@ -20,23 +25,63 @@ class LookList extends Component {
     this.renderLooks = this.renderLooks.bind(this);
     this.renderEmpty = this.renderEmpty.bind(this);
 
-    this.onDeleteClick = this.onDeleteClick.bind(this);
+    this.handleScroll = this.handleScroll.bind(this);
+    this.loadMorePhotos = this.loadMorePhotos.bind(this);
   }
 
   componentWillReceiveProps(nextProps) {
     const { looks } = nextProps;
-    const { errorMessage, data} = looks
+    const { errorMessage, data, totalCount } = looks
 
-    this.setState({
-      errorMessage: errorMessage,
-      list: data
-    })
+    if(errorMessage) {
+      this.setState({ errorMessage: errorMessage })
+    } else {
+
+      const count = this.state.list.length + data.length
+
+      this.setState({
+        list: this.state.list ? this.state.list.concat(data) : list,
+        count: count,
+        totalCount: totalCount,
+        pageNum: this.state.pageNum + 1,
+        loadedAll: count >= totalCount
+      })
+    }
+  }
+
+  componentDidMount() {
+    this.loadMorePhotos();
+    this.loadMorePhotos = debounce(this.loadMorePhotos, 200);
+    window.addEventListener('scroll', this.handleScroll);
   }
 
   /****************************************************************************/
   /********************************* Layout ***********************************/
   /****************************************************************************/
 
+  handleScroll() {
+    let scrollY = window.scrollY || window.pageYOffset || document.documentElement.scrollTop;
+    if (window.innerHeight + scrollY >= document.body.offsetHeight - 50) {
+      this.loadMorePhotos();
+    }
+  }
+
+  loadMorePhotos(e) {
+    if (e) {
+      e.preventDefault();
+    }
+    if (this.state.count > this.state.totalCount) {
+      this.setState({ loadedAll: true });
+      return;
+    }
+
+    const urlParams = {
+      per_page: '10',
+      page: this.state.pageNum,
+    };
+
+    this.props.dispatch(fetchLooks(urlParams));
+  }
 
   /********************************* Look *************************************/
 
@@ -75,7 +120,6 @@ class LookList extends Component {
       <Gallery
         photos={this.state.list}
         margin={5}
-        onClick={this.onDeleteClick}
       />
     )
   }
@@ -101,6 +145,11 @@ class LookList extends Component {
       <div>
         <div className="text-center ff-title">Looks</div>
           {this.renderLooks()}
+          {!this.state.loadedAll && (
+            <div className="loading-msg" id="msg-loading-more">
+              Loading
+            </div>
+          )}
       </div>
     );
   }

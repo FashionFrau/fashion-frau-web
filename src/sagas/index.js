@@ -4,7 +4,7 @@ import { api } from '../services';
 
 function* fetchLooks(action) {
    try {
-      const response = yield call(api.fetchLooks);
+      const response = yield call(api.fetchLooks, action.params);
       yield put({type: ActionTypes.LOOKS.SUCCESS, payload: response});
    } catch (e) {
       yield put({type: ActionTypes.LOOKS.FAILURE, message: e.message});
