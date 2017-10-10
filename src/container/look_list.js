@@ -1,10 +1,11 @@
 import React, { Component } from 'react'
 import ReactDOM from 'react-dom'
 import { connect } from 'react-redux'
-import { fetchLooks, deleteLook } from '../actions'
 import Gallery from 'react-photo-gallery'
-import Measure from 'react-measure';
-import { debounce } from '../utils';
+import { Modal, Button } from 'react-bootstrap'
+
+import { debounce } from '../utils'
+import { fetchLooks, deleteLook } from '../actions'
 
 class LookList extends Component {
 
@@ -26,7 +27,9 @@ class LookList extends Component {
     this.renderEmpty = this.renderEmpty.bind(this);
 
     this.handleScroll = this.handleScroll.bind(this);
-    this.loadMorePhotos = this.loadMorePhotos.bind(this);
+    this.loadMoreLooks = this.loadMoreLooks.bind(this);
+
+    this.openLook = this.openLook.bind(this);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -34,6 +37,7 @@ class LookList extends Component {
     const { errorMessage, data, totalCount } = looks
 
     if(errorMessage) {
+
       this.setState({ errorMessage: errorMessage })
     } else {
 
@@ -50,23 +54,23 @@ class LookList extends Component {
   }
 
   componentDidMount() {
-    this.loadMorePhotos();
-    this.loadMorePhotos = debounce(this.loadMorePhotos, 200);
+    this.loadMoreLooks();
+    this.loadMoreLooks = debounce(this.loadMoreLooks, 200);
     window.addEventListener('scroll', this.handleScroll);
   }
 
-  /****************************************************************************/
-  /********************************* Layout ***********************************/
-  /****************************************************************************/
+/******************************************************************************/
+/******************************************************************************/
 
+/*********************************** Scroll ***********************************/
   handleScroll() {
     let scrollY = window.scrollY || window.pageYOffset || document.documentElement.scrollTop;
     if (window.innerHeight + scrollY >= document.body.offsetHeight - 50) {
-      this.loadMorePhotos();
+      this.loadMoreLooks();
     }
   }
 
-  loadMorePhotos(e) {
+  loadMoreLooks(e) {
     if (e) {
       e.preventDefault();
     }
@@ -83,7 +87,14 @@ class LookList extends Component {
     this.props.dispatch(fetchLooks(urlParams));
   }
 
-  /********************************* Look *************************************/
+/*********************************** Look *************************************/
+
+  openLook(event, obj) {
+    this.setState({
+      currentLook: obj.index,
+      modalIsOpen: true,
+    });
+  }
 
   onDeleteClick(event, obj) {
     const { photo: { id } } = obj
@@ -102,9 +113,10 @@ class LookList extends Component {
       </p>
     )
   }
+/********************************* Layout *************************************/
+
 
 /********************************* No data ************************************/
-
   renderEmpty() {
       return(
         <div className="jumbotron">
@@ -114,12 +126,32 @@ class LookList extends Component {
   }
 
 /********************************* Looks **************************************/
-  renderLooks() {
+  renderModal() {
+    let lgClose = () => this.setState({ modalIsOpen: false });
 
+    return(
+      <Modal show={this.state.modalIsOpen} onHide={lgClose} bsSize="large" aria-labelledby="contained-modal-title-lg">
+        <Modal.Header closeButton>
+          <Modal.Title id="contained-modal-title-lg">Modal heading</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <h4>Wrapped Text</h4>
+          <p>Cras mattis consectetur purus sit amet fermentum. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Morbi leo risus, porta ac consectetur ac, vestibulum at eros.</p>
+          <p>Aenean lacinia bibendum nulla sed consectetur. Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Donec sed odio dui. Donec ullamcorper nulla non metus auctor fringilla.</p>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button onClick={this.props.onHide}>Close</Button>
+        </Modal.Footer>
+      </Modal>
+    )
+  }
+
+  renderLooks() {
     return(
       <Gallery
         photos={this.state.list}
         margin={5}
+        onClick={this.openLook}
       />
     )
   }
@@ -145,6 +177,8 @@ class LookList extends Component {
       <div>
         <div className="text-center ff-title">Looks</div>
           {this.renderLooks()}
+          {/* FIXME React 16 does not support modal for now... wait until they fix it */}
+          {/* {this.renderModal()} */}
           {!this.state.loadedAll && (
             <div className="loading-msg" id="msg-loading-more">
               Loading

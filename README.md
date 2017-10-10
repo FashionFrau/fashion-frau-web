@@ -10,3 +10,4 @@ Start nginx locally: `brew services start nginx`
 
 
 TODO: XSS CRFS rails
+TODO: open look at modal in look list
