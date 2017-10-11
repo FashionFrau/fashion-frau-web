@@ -1,23 +1,21 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import { Provider } from 'react-redux';
-import { BrowserRouter, Route, Switch } from 'react-router-dom'
+import React from 'react'
+import ReactDOM from 'react-dom'
+import { Provider } from 'react-redux'
+import { BrowserRouter as Router, Route } from 'react-router-dom'
 
-import App from './components';
-import LookList from './container/look_list';
-import createStoreWithMiddleware from './store/configureStore';
+import App from './components'
+import LookList from './container/look_list'
+import createStoreWithMiddleware from './store/configureStore'
 
 const store = createStoreWithMiddleware();
 
 ReactDOM.render(
   <Provider store={store}>
-    <BrowserRouter>
+    <Router>
       <div>
-        <Switch>
+          {/* <Route path="/looks" component={ App } /> */}
           <Route path="/" component={ App } />
-          <Route path="/looks" component={ App } />
-        </Switch>
       </div>
-    </BrowserRouter>
+    </Router>
   </Provider>
   , document.querySelector('.main'));

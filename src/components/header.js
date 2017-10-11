@@ -12,7 +12,7 @@ export default (props) => {
           </Navbar.Header>
           <Navbar.Collapse>
             <Nav>
-              <NavItem eventKey={2} href="/">List</NavItem>
+              <NavItem>Looks</NavItem>
             </Nav>
             <Nav pullRight>
               <NavItem eventKey={3} href="#">Add</NavItem>
