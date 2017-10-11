@@ -21,8 +21,6 @@ class LookList extends Component {
       loadedAll: false
     };
 
-    this.props.dispatch(fetchLooks());
-
     this.renderLooks = this.renderLooks.bind(this);
     this.renderEmpty = this.renderEmpty.bind(this);
 
@@ -48,7 +46,7 @@ class LookList extends Component {
         count: count,
         totalCount: totalCount,
         pageNum: this.state.pageNum + 1,
-        loadedAll: count >= totalCount
+        loadedAll: this.hasLoadedAll(count,totalCount)
       })
     }
   }
@@ -70,11 +68,16 @@ class LookList extends Component {
     }
   }
 
+  hasLoadedAll(count, totalCount) {
+    return count >= totalCount
+  }
+
   loadMoreLooks(e) {
     if (e) {
       e.preventDefault();
     }
-    if (this.state.count > this.state.totalCount) {
+
+    if (this.hasLoadedAll(this.state.count,this.state.totalCount)) {
       this.setState({ loadedAll: true });
       return;
     }
