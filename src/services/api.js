@@ -6,6 +6,8 @@ const instance = axios.create({
   timeout: 1000
 })
 
+instance.defaults.headers.post['Content-Type'] = 'application/json';
+
 export function fetchLooks(params) {
   let url = 'users/1/looks?'
 
