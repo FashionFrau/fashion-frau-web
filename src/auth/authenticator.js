@@ -1,7 +1,7 @@
 class Auth {
   static loggedIn() {
-    // return true;
-    return !!sessionStorage.jwt;
+    return true;
+    // return !!sessionStorage.jwt;
   }
 
   static logOut() {

@@ -1,0 +1,23 @@
+.btn-login {
+  border-radius: 1em;
+  background: #000;
+}
+
+.btn-login:hover {
+  background-color: rgb(250, 120, 166);
+}
+
+.enclose {
+  position:fixed;
+  bottom:0px;
+  width:100%;
+}
+
+.ff{
+  font-family: 'Courgette-Regular';
+  color: rgb(250, 120, 166);
+  font-style: normal;
+  font-size: 5em;
+  border-radius:20px;
+	text-align:center;
+}

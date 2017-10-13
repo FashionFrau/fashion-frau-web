@@ -11,3 +11,4 @@ Start nginx locally: `brew services start nginx`
 
 TODO: XSS CRFS rails -> ensure json header request. that's it
 TODO: open look at modal in look list
+TODO: Double click look list generates error
