@@ -1,18 +1,18 @@
 import React, { Component } from 'react'
-import { Link } from 'react-router-dom'
-import { Image } from 'react-bootstrap'
+import { Button, Image } from 'react-bootstrap'
+import { api } from '../services';
 
 
 export default class LogInPage extends Component {
-  
+
   render() {
     return (
-    <div>
-      <div className="ff">ff</div>
-      <Link to="#" className="enclose btn-login">
-        <Image src="../images/instagram-button.png" responsive className="" />
-      </Link>
-    </div>
+      <div>
+        <div className="ff">ff</div>
+        <a href={api.authUrl()} className="enclose btn-login">
+         <Image src="../images/instagram-button.png" responsive />
+        </a>
+      </div>
     );
   }
 }

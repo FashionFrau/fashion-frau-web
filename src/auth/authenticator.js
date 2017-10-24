@@ -1,11 +1,25 @@
+import { Cookies } from 'react-cookie';
+import _ from 'lodash'
+
 class Auth {
-  static loggedIn() {
-    return true;
-    // return !!sessionStorage.jwt;
+
+  static currentUser() {
+    const cookies = new Cookies()
+    const user = cookies.get('user')
+
+    if (!_.isUndefined(user)) {
+      return user
+    }
+    return undefined
   }
 
-  static logOut() {
-    sessionStorage.removeItem('jwt');
+  static isLogged() {
+    const user = this.currentUser()
+
+    if (!_.isUndefined(user)) {
+      return !!user.auth_token
+    }
+    return false
   }
 }
 

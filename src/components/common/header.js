@@ -23,7 +23,7 @@ export default (props) => {
             <LinkContainer exact strict to="/add">
               <NavItem eventKey={2}>Add</NavItem>
             </LinkContainer>
-            <LinkContainer exact to="/signout">
+            <LinkContainer replace to="/signout">
               <NavItem eventKey={3}>Sign Out</NavItem>
             </LinkContainer>
           </Nav>
