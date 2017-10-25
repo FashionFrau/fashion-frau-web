@@ -19,7 +19,7 @@ instance.defaults.headers.post['Content-Type'] = 'application/json';
 instance.interceptors.request.use(function (config) {
     const user = auth.currentUser()
     if(!_.isUndefined(user) && !_.isUndefined(user.auth_token)) {
-      config.headers = {'Authorization': `Bearer ${user.auth_token}`}
+      config.headers['Authorization'] = `Bearer ${user.auth_token}`
     }
     return config;
   }, function (error) {
