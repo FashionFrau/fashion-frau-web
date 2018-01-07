@@ -59,9 +59,9 @@ export default class PreviewLook extends Component {
     );
   }
 
-  renderIphone8() {
+  renderIphone5S() {
     return(
-      <div className="marvel-device iphone8 gold">
+      <div className="marvel-device iphone5s gold">
           <div className="top-bar"></div>
           <div className="sleep"></div>
           <div className="volume"></div>
@@ -90,7 +90,7 @@ export default class PreviewLook extends Component {
     }
     return(
       <div>
-          {this.renderIphone8()}
+          {this.renderIphone5S()}
       </div>
     );
   }

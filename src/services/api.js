@@ -55,6 +55,10 @@ export function deleteLook(id) {
   return instance.delete(`users/1/looks/${id}`)
 }
 
+export function createLook(id) {
+  return instance.post(`users/1/looks/${id}/new`)
+}
+
 /******************************************************************************/
 export function authenticate(code) {
   return instance.get(`/auth/callback?code=${code}`)

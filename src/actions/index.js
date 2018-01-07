@@ -1,10 +1,11 @@
 const REQUEST = 'REQUEST'
+const CREATE = 'CREATE'
 const DELETE = 'DELETE'
 const SUCCESS = 'SUCCESS'
 const FAILURE = 'FAILURE'
 
 function createRequestTypes(base) {
-  return [REQUEST, SUCCESS, FAILURE, DELETE].reduce((acc, type) => {
+  return [REQUEST, CREATE, SUCCESS, FAILURE, DELETE].reduce((acc, type) => {
 		acc[type] = `${base}_${type}`
 		return acc
 	}, {})
@@ -42,6 +43,12 @@ export function fetchLook(id) {
     type: LOOK.REQUEST,
     id: id
   };
+}
+export function createLook(id) {
+  return {
+    type: LOOK.CREATE,
+    id: id
+  }
 }
 
 export function deleteLook(id) {

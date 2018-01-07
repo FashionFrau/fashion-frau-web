@@ -35,7 +35,6 @@ class LookList extends Component {
     const { errorMessage, data, totalCount } = looks
 
     if(errorMessage) {
-
       this.setState({ errorMessage: errorMessage })
     } else {
 
@@ -69,7 +68,7 @@ class LookList extends Component {
   }
 
   hasLoadedAll(count, totalCount) {
-    return count >= totalCount
+    return parseInt(count) >= parseInt(totalCount)
   }
 
   loadMoreLooks(e) {
@@ -175,13 +174,13 @@ class LookList extends Component {
         </div>
       )
     }
-
+    
     return (
       <div>
-        <div className="text-center ff-title">Looks</div>
           {this.renderLooks()}
           {/* FIXME React 16 does not support modal for now... wait until they fix it */}
           {/* {this.renderModal()} */}
+
           {!this.state.loadedAll && (
             <div className="loading-msg" id="msg-loading-more">
               Loading

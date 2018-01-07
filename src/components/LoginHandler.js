@@ -11,7 +11,7 @@ class LoginHandler extends Component {
   constructor(props) {
       super(props)
 
-      this.state = { user: null, message: undefined  }
+      this.state = { user: null, message: undefined, isLogged: false  }
   }
 
   componentWillReceiveProps(nextProps) {
@@ -21,9 +21,9 @@ class LoginHandler extends Component {
     if (_.hasIn(user, 'data')) {
       if (_.hasIn(user.data, 'auth_token')) {
         cookies.set('user', user.data, { path: '/', secure: false, httpOnly: false })
-        this.setState({user: user.data})
+        this.setState({user: user.data, isLogged: true})
       } else {
-        this.setState({message: user.data})
+        this.setState({message: user.data, isLogged: false})
         cookies.remove('user')
       }
     } else {
@@ -40,7 +40,7 @@ class LoginHandler extends Component {
 
 
   render() {
-    if (auth.isLogged() === true) {
+    if (this.state.isLogged === true) {
       return(
         <Redirect to="/" />
       )

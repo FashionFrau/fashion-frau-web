@@ -2,7 +2,7 @@ import { call, put, takeLatest, takeEvery } from 'redux-saga/effects';
 import * as ActionTypes from '../actions'
 import { api } from '../services';
 
-
+import { watchGetRecentMedia } from './instagram'
 
 function* authenticate(action) {
   try {
@@ -56,6 +56,14 @@ function* deleteLook(action) {
    }
 }
 
+function* createLook(action) {
+  try {
+     const response = yield call(api.createLook, action.id);
+     yield put({type: ActionTypes.LOOK.SUCCESS, payload: response});
+  } catch (e) {
+     yield put({type: ActionTypes.LOOK.FAILURE, message: e.message});
+  }
+}
 
 /******************************************************************************/
 /******************************* WATCHERS *************************************/
@@ -82,6 +90,10 @@ function* watchDeleteLook() {
   yield takeLatest(ActionTypes.LOOK.DELETE, deleteLook);
 }
 
+function* watchCreateLook() {
+  yield takeLatest(ActionTypes.LOOK.CREATE, createLook);
+}
+
 export default function* rootSaga() {
   yield[
     watchAuthenticate(),
@@ -89,6 +101,10 @@ export default function* rootSaga() {
 
     watchFetchLooks(),
     watchFetchLook(),
-    watchDeleteLook()
+    watchCreateLook(),
+    watchDeleteLook(),
+
+    // instagram watchers
+    watchGetRecentMedia()
   ]
 };
