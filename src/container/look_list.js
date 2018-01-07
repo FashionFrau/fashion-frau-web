@@ -2,10 +2,11 @@ import React, { Component } from 'react'
 import ReactDOM from 'react-dom'
 import { connect } from 'react-redux'
 import Gallery from 'react-photo-gallery'
-import { Modal, Button } from 'react-bootstrap'
+import { Modal, Button, Row, Col, Panel } from 'react-bootstrap'
 
 import { debounce } from '../utils'
 import { fetchLooks, deleteLook } from '../actions'
+import { normalizeLooks } from '../services/normalizr/fromFashionFrau'
 
 class LookList extends Component {
 
@@ -14,11 +15,13 @@ class LookList extends Component {
 
     this.state = {
       errorMessage: '',
+      originalList: [],
       list: [],
       count: 0,
       totalCount: 1,
       pageNum: 1,
-      loadedAll: false
+      loadedAll: false,
+      currentLook: undefined
     };
 
     this.renderLooks = this.renderLooks.bind(this);
@@ -27,7 +30,8 @@ class LookList extends Component {
     this.handleScroll = this.handleScroll.bind(this);
     this.loadMoreLooks = this.loadMoreLooks.bind(this);
 
-    this.openLook = this.openLook.bind(this);
+    this.handleOpenModal = this.handleOpenModal.bind(this);
+    this.handleCloseModal = this.handleCloseModal.bind(this);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -38,10 +42,17 @@ class LookList extends Component {
       this.setState({ errorMessage: errorMessage })
     } else {
 
-      const count = this.state.list.length + data.length
+      if(_.isNil(data) || _.isNil(totalCount)) {
+        return
+      }
+
+      const normalizedData = normalizeLooks(data)
+      const count = this.state.list + normalizedData.length
+
 
       this.setState({
-        list: this.state.list ? this.state.list.concat(data) : list,
+        list: this.concatUnique(this.state.list.concat(normalizedData)),
+        originalList: this.concatUnique(this.state.originalList.concat(data)),
         count: count,
         totalCount: totalCount,
         pageNum: this.state.pageNum + 1,
@@ -51,14 +62,28 @@ class LookList extends Component {
   }
 
   componentDidMount() {
-    this.loadMoreLooks();
-    this.loadMoreLooks = debounce(this.loadMoreLooks, 200);
-    window.addEventListener('scroll', this.handleScroll);
+    this.loadMoreLooks()
+    this.loadMoreLooks = debounce(this.loadMoreLooks, 200)
+    window.addEventListener('scroll', this.handleScroll)
+  }
+
+  componentWillUnmount(){
+    window.removeEventListener('scroll', this.handleScroll)
   }
 
 /******************************************************************************/
 /******************************************************************************/
 
+  concatUnique(array) {
+    var a = array.concat();
+    for(var i=0; i<a.length; ++i) {
+         for(var j=i+1; j<a.length; ++j) {
+             if(a[i].id === a[j].id)
+                 a.splice(j--, 1);
+         }
+     }
+     return a;
+  }
 /*********************************** Scroll ***********************************/
   handleScroll() {
     let scrollY = window.scrollY || window.pageYOffset || document.documentElement.scrollTop;
@@ -88,16 +113,63 @@ class LookList extends Component {
 
     this.props.dispatch(fetchLooks(urlParams));
   }
+/******************************************************************************/
+/********************************* Layout *************************************/
 
 /*********************************** Look *************************************/
 
-  openLook(event, obj) {
-    this.setState({
-      currentLook: obj.index,
-      modalIsOpen: true,
-    });
+  handleOpenModal(event) {
+    const look = this.getLookBy(event.target.id)
+    this.setState({ showModal: true, currentLook: look });
   }
 
+  handleCloseModal() {
+    this.setState({ showModal: false, currentLook: undefined });
+  }
+
+  getLookBy(id) {
+    const index = _.findIndex(this.state.originalList, ['id', id]);
+    return this.state.originalList[index]
+  }
+
+  renderModal() {
+    if(!this.state.currentLook) {
+      return
+    }
+    const look = this.state.currentLook
+
+    return(
+      <div className="static-modal">
+        <Modal key="modal" show={this.state.showModal} onHide={this.handleCloseModal} bsSize="large" aria-labelledby="contained-modal-title-lg">
+          <Modal.Header closeButton>
+            <Modal.Title id="contained-modal-title-lg" className="text-center">Look</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <Row className="show-grid">
+              <Col md={6} mdPush={6}>
+                <Panel>
+                  <Panel.Body>Show number of likes
+                    Likes: {look.likes}
+                  </Panel.Body>
+                </Panel>
+              </Col>
+              <Col md={6} mdPull={6}>
+                <img src={look.lookUrl} className="img-responsive" />
+              </Col>
+            </Row>
+          </Modal.Body>
+          <Modal.Footer>
+            <Row className="show-grid">
+              <Col md={6} mdPush={6}>
+                <Button onClick={this.handleCloseModal}>Close</Button>
+              </Col>
+              <Col md={6} mdPull={6} />
+            </Row>
+          </Modal.Footer>
+        </Modal>
+      </div>
+    )
+  }
   onDeleteClick(event, obj) {
     const { photo: { id } } = obj
 
@@ -115,8 +187,6 @@ class LookList extends Component {
       </p>
     )
   }
-/********************************* Layout *************************************/
-
 
 /********************************* No data ************************************/
   renderEmpty() {
@@ -128,33 +198,16 @@ class LookList extends Component {
   }
 
 /********************************* Looks **************************************/
-  renderModal() {
-    let lgClose = () => this.setState({ modalIsOpen: false });
-
-    return(
-      <Modal show={this.state.modalIsOpen} onHide={lgClose} bsSize="large" aria-labelledby="contained-modal-title-lg">
-        <Modal.Header closeButton>
-          <Modal.Title id="contained-modal-title-lg">Modal heading</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <h4>Wrapped Text</h4>
-          <p>Cras mattis consectetur purus sit amet fermentum. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Morbi leo risus, porta ac consectetur ac, vestibulum at eros.</p>
-          <p>Aenean lacinia bibendum nulla sed consectetur. Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Donec sed odio dui. Donec ullamcorper nulla non metus auctor fringilla.</p>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button onClick={this.props.onHide}>Close</Button>
-        </Modal.Footer>
-      </Modal>
-    )
-  }
-
   renderLooks() {
     return(
-      <Gallery
-        photos={this.state.list}
-        margin={5}
-        onClick={this.openLook}
-      />
+      <div>
+        <Gallery
+          photos={this.state.list}
+          margin={5}
+          onClick={this.handleOpenModal}
+        />
+        {this.renderModal()}
+      </div>
     )
   }
 
@@ -174,7 +227,7 @@ class LookList extends Component {
         </div>
       )
     }
-    
+
     return (
       <div>
           {this.renderLooks()}

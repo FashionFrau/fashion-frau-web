@@ -11,7 +11,7 @@ const permissions = "basic public_content likes relationships"
 
 const instance = axios.create({
   baseURL: '/api',
-  timeout: 1000
+  timeout: 10000
 })
 
 instance.defaults.headers.post['Content-Type'] = 'application/json';
@@ -39,7 +39,8 @@ instance.interceptors.response.use(function (response) {
 /******************************************************************************/
 
 export function fetchLooks(params) {
-  let url = 'users/1/looks?'
+  const uid = auth.currentUser().uid
+  let url = `users/${uid}/looks?`
 
   if(!_.isUndefined(params)) {
     url += queryString.stringify(params);
@@ -48,15 +49,18 @@ export function fetchLooks(params) {
 }
 
 export function fetchLook(id) {
-  return instance.get(`users/1/looks/${id}`)
+  const uid = auth.currentUser().uid
+  return instance.get(`users/${uid}/looks/${id}`)
 }
 
 export function deleteLook(id) {
-  return instance.delete(`users/1/looks/${id}`)
+  const uid = auth.currentUser().uid
+  return instance.delete(`users/${uid}/looks/${id}`)
 }
 
 export function createLook(id) {
-  return instance.post(`users/1/looks/${id}/new`)
+  const uid = auth.currentUser().uid
+  return instance.post(`users/${uid}/looks/${id}/new`)
 }
 
 /******************************************************************************/

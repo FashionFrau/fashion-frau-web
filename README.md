@@ -9,9 +9,8 @@ Deploy locally: `cp -R dist/ /usr/local/var/www`
 Start nginx locally: `brew services start nginx`
 
 
-TODO: first login on safari fails
-TODO: XSS CRFS rails -> ensure json header request. that's it
 TODO: open look at modal in look list
+
 TODO: Double click look list generates error
 
 
